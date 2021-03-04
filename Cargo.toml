@@ -11,6 +11,9 @@ license = "MIT"
 keywords = ["cli", "git"]
 categories = ["command-line-utilities"]
 
+[dependencies]
+termcolor = "1.1"
+
 [profile.release]
 lto = true
 codegen-units = 1
