@@ -5,7 +5,6 @@ authors = ["Arpan Laha <arpanlaha99@gmail.com>"]
 edition = "2018"
 description = "A git typo handler."
 readme = "README.md"
-homepage = "https://github.com/arpanlaha/gi_t"
 repository = "https://github.com/arpanlaha/gi_t"
 license = "MIT"
 keywords = ["cli", "git", "typo"]

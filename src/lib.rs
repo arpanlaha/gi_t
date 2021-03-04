@@ -9,7 +9,7 @@ use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 /// Corrects arguments passed to `gi_t` into the corresponding `git` command.
 ///
 /// # Arguments
-/// * `args` - the arguments to the program in Vec form.
+/// * `args` - the arguments to the program in [`Vec`] form.
 ///
 /// # Errors
 /// If the function receives malformed arguments or runs into errors setting terminal colors or
