@@ -1,6 +1,6 @@
 [package]
 name = "gi_t"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Arpan Laha <arpanlaha99@gmail.com>"]
 edition = "2018"
 description = "A git typo handler."
@@ -8,7 +8,7 @@ readme = "README.md"
 homepage = "https://github.com/arpanlaha/gi_t"
 repository = "https://github.com/arpanlaha/gi_t"
 license = "MIT"
-keywords = ["cli", "git"]
+keywords = ["cli", "git", "typo"]
 categories = ["command-line-utilities"]
 
 [dependencies]
