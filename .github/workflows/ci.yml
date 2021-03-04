@@ -75,7 +75,7 @@ jobs:
           toolchain: stable
 
       - name: Run tests
-        run: cargo +nightly test > tests.txt
+        run: cargo test > tests.txt
 
       - name: Upload tests
         uses: actions/upload-artifact@v2
