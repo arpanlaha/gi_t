@@ -4,8 +4,14 @@ version = "0.0.1"
 authors = ["Arpan Laha <arpanlaha99@gmail.com>"]
 edition = "2018"
 description = "A git typo handler."
+readme = "README.md"
+homepage = "https://github.com/arpanlaha/gi_t"
+repository = "https://github.com/arpanlaha/gi_t"
 license = "MIT"
+keywords = ["cli", "git"]
+categories = ["command-line-utilities"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
+[profile.release]
+lto = true
+codegen-units = 1
+panic = 'abort'
