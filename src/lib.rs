@@ -21,7 +21,7 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
         args.remove(0);
     }
 
-    let mut stdout = StandardStream::stdout(ColorChoice::Always);
+    let mut stdout = StandardStream::stdout(ColorChoice::Auto);
 
     if stdout
         .set_color(ColorSpec::new().set_fg(Some(Color::Green)))
