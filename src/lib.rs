@@ -6,11 +6,27 @@ use std::{
 };
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
+/// Corrects arguments passed to `gi_t` into the corresponding `git` command.
+///
+/// # Arguments
+/// * `args` - the arguments to the program in Vec form.
+///
+/// # Errors
+/// If the function receives malformed arguments or runs into errors setting terminal colors or
+/// spawning a child process, the corresponding [`GiError`] will be returned.
 pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
+    // remove program name
+    args.remove(0);
+
+    // save original arguments
+    let original = args.join(" ");
+
+    // expect some arguments (not just `gi`)
     if args.is_empty() {
         return Err(GiError::NoArgs);
     }
 
+    // if the first argument doesn't start with a `t`, it's too far away to assume it should be git
     if !args[0].starts_with('t') {
         return Err(GiError::BadPrefix);
     }
@@ -31,7 +47,8 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
     }
 
     println!(
-        "Running `git{}{}`...",
+        "Correcting `gi {}` to `git{}{}`...",
+        original,
         if args.is_empty() { "" } else { " " },
         args.join(" ")
     );
@@ -39,8 +56,6 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
     if stdout.reset().is_err() {
         return Err(GiError::StdoutReset);
     }
-
-    stdout.reset().expect("Unable to reset stdout color!");
 
     println!();
 
@@ -58,16 +73,27 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
     Ok(())
 }
 
+/// An enum to describe different errors that could occur while executing `gi_t`.
 #[derive(Debug, Clone)]
 pub enum GiError {
+    /// The first argument does not begin with a `t`.
     BadPrefix,
+
+    /// Spawning `git` child process results in a failure.
     GitFail,
+
+    /// No arguments are passed to `gi_t`.
     NoArgs,
+
+    /// A failure is encountered resetting stdout terminal color.
     StdoutReset,
+
+    /// A failure is encountered setting stdout terminal color.
     StdoutSet,
 }
 
 impl GiError {
+    /// A helper method to print the associated error message for a [`GiError`].
     pub fn print(self) {
         StandardStream::stderr(ColorChoice::Always)
             .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
