@@ -1,3 +1,5 @@
+#![warn(clippy::all, clippy::pedantic, clippy::nursery, clippy::cargo)]
+
 use std::{
     env,
     process::{self, Command, Stdio},
@@ -36,13 +38,13 @@ fn main() {
 
     println!(
         "Running `git{}{}`...",
-        if !args.is_empty() { " " } else { "" },
+        if args.is_empty() { "" } else { " " },
         args.join(" ")
     );
 
     stdout.reset().expect("Unable to reset stderr color!");
 
-    println!("");
+    println!();
 
     Command::new("git")
         .args(&args)
