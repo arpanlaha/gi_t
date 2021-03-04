@@ -46,6 +46,7 @@ fn main() {
 
     Command::new("git")
         .args(&args)
+        .stdin(Stdio::inherit())
         .stdout(Stdio::inherit())
         .stderr(Stdio::inherit())
         .output()
