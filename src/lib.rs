@@ -6,18 +6,7 @@ use std::{
 };
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
-pub fn process_args(args: impl Iterator<Item = String>) -> Result<(), GiError> {
-    let mut args: Vec<String> = args.collect();
-
-    let mut stderr = StandardStream::stderr(ColorChoice::Always);
-
-    if stderr
-        .set_color(ColorSpec::new().set_fg(Some(Color::Red)))
-        .is_err()
-    {
-        return Err(GiError::StderrSet);
-    }
-
+pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
     if args.is_empty() {
         return Err(GiError::NoArgs);
     }
@@ -74,7 +63,6 @@ pub enum GiError {
     BadPrefix,
     GitFail,
     NoArgs,
-    StderrSet,
     StdoutReset,
     StdoutSet,
 }
@@ -98,7 +86,6 @@ impl Display for GiError {
                 Self::BadPrefix => "Argument does not start with a `t`!",
                 Self::GitFail => "Failed to run git!",
                 Self::NoArgs => "No arguments provided!",
-                Self::StderrSet => "Unable to set stderr color!",
                 Self::StdoutReset => "Unable to reset stdout color!",
                 Self::StdoutSet => "Unable to set stdout color!,",
             }

@@ -4,5 +4,5 @@ use gi_t::GiError;
 use std::env;
 
 fn main() {
-    gi_t::process_args(env::args().skip(1)).unwrap_or_else(GiError::print);
+    gi_t::process_args(env::args().skip(1).collect()).unwrap_or_else(GiError::print);
 }
