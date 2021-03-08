@@ -21,7 +21,7 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
     // save original arguments
     let original = args.join(" ");
 
-    transform_args(&mut args)?;
+    let args = transform_args(args)?;
 
     let mut stdout = StandardStream::stdout(ColorChoice::Auto);
 
@@ -58,7 +58,7 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
 ///
 /// # Errors
 /// If the function receives malformed arguments, the corresponding [`GiError`] will be returned.
-pub fn transform_args(args: &mut Vec<String>) -> GiResult {
+pub fn transform_args(mut args: Vec<String>) -> GiResult<Vec<String>> {
     // expect some arguments (not just `gi`)
     if args.is_empty() {
         return Err(GiError::NoArgs);
@@ -75,13 +75,13 @@ pub fn transform_args(args: &mut Vec<String>) -> GiResult {
         args.remove(0);
     }
 
-    Ok(())
+    Ok(args)
 }
 
-type GiResult = Result<(), GiError>;
+type GiResult<T> = Result<T, GiError>;
 
 /// An enum to describe different errors that could occur while executing `gi_t`.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum GiError {
     /// The first argument does not begin with a `t`.
     BadPrefix,
@@ -123,5 +123,51 @@ impl Display for GiError {
                 Self::StdoutSet => "Unable to set stdout color!,",
             }
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{transform_args, GiError};
+
+    #[test]
+    fn no_args() {
+        assert_eq!(transform_args(vec![]), Err(GiError::NoArgs));
+    }
+
+    #[test]
+    fn no_t() {
+        assert_eq!(transform_args(vec!["foo".into()]), Err(GiError::BadPrefix));
+    }
+
+    #[test]
+    fn only_t() {
+        assert_eq!(transform_args(vec!["t".into()]), Ok(vec![]));
+    }
+
+    #[test]
+    fn simple_valid() {
+        assert_eq!(
+            transform_args(vec!["tstatus".into()]),
+            Ok(vec!["status".into()])
+        );
+    }
+
+    #[test]
+    fn complex_valid() {
+        assert_eq!(
+            transform_args(vec![
+                "tconfig".into(),
+                "--global".into(),
+                "name".into(),
+                "Firstname Lastname".into()
+            ]),
+            Ok(vec![
+                "config".into(),
+                "--global".into(),
+                "name".into(),
+                "Firstname Lastname".into()
+            ])
+        );
     }
 }
