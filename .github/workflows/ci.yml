@@ -75,10 +75,4 @@ jobs:
           toolchain: stable
 
       - name: Run tests
-        run: cargo test > tests.txt
-
-      - name: Upload tests
-        uses: actions/upload-artifact@v2
-        with:
-          name: Test Results
-          path: tests.txt
+        run: cargo test
