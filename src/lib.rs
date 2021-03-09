@@ -2,7 +2,7 @@
 
 use std::{
     fmt::{Display, Formatter, Result as FmtResult},
-    process::{Command, Stdio},
+    process::Command,
 };
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
@@ -42,10 +42,7 @@ pub fn process_args(mut args: Vec<String>) -> Result<(), GiError> {
 
     Command::new("git")
         .args(&args)
-        .stdin(Stdio::inherit())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .output()
+        .status()
         .map_err(|_| GiError::GitFail)?;
 
     Ok(())
@@ -64,14 +61,16 @@ pub fn transform_args(mut args: Vec<String>) -> GiResult<Vec<String>> {
         return Err(GiError::NoArgs);
     }
 
+    let first = &mut args[0];
+
     // if the first argument doesn't start with a `t`, it's too far away to assume it should be git
-    if !args[0].starts_with('t') {
+    if !first.starts_with('t') {
         return Err(GiError::BadPrefix);
     }
 
-    args[0].remove(0);
+    first.remove(0);
 
-    if args[0].is_empty() {
+    if first.is_empty() {
         args.remove(0);
     }
 
